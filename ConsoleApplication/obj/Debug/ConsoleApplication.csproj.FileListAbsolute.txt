@@ -1,1 +1,2 @@
 D:\Work\ConsoleApplication\ConsoleApplication\bin\Debug\ConsoleApplication.exe.config
+D:\Work\ConsoleApplication\Task-1\ConsoleApplication\bin\Debug\ConsoleApplication.exe.config
