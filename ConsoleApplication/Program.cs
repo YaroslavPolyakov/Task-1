@@ -5,14 +5,45 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 using System.Security.Permissions;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace ConsoleApplication
 {
     class Program
     {
+        
+    public static void LoadJson()
+        {
+            string jsonString = "";
+            Console.Write("Path: ");
+            string path = Console.ReadLine();
+            using (StreamReader sr = new StreamReader(@path))
+            {
+                while (true)
+                {
+                    string temp = sr.ReadLine();
+                    if (temp == null) break;
+                    jsonString += "\n" + temp;
+                }
+            }
+            Console.WriteLine(jsonString);
+
+            JArray jsonVal = JArray.Parse(jsonString) as JArray;
+            dynamic data = jsonVal;
+
+            foreach (dynamic item in data)
+            {
+                Console.WriteLine("{0}\n{1}\n{2}\n{3}", item.firstName, item.lastName,item.age,item.address);
+                foreach (dynamic cars in item.car)
+                {
+                    Console.WriteLine("{0}\n{1}\n",cars.model,cars.price);
+                }
+            }
+
+        }
         public class Monitoring
         {
-
             //Output all files from subdirectories
             public static void OutputAllFilse()
             {
@@ -56,6 +87,12 @@ namespace ConsoleApplication
                 }
                 Console.WriteLine(text);
             }
+
+            public static void Parse()
+            {
+                //
+            }
+
             //Monitoring directories
             [PermissionSet(SecurityAction.Demand, Name = "FullTrust")]
             public static void WatchDirectory()
@@ -124,6 +161,9 @@ namespace ConsoleApplication
                         break;
                     case "4":
                         Monitoring.WatchDirectory();
+                        break;
+                    case "5":
+                        LoadJson();
                         break;
                     default:
                         Console.WriteLine("Error");
