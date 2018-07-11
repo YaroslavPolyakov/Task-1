@@ -7,13 +7,47 @@ using System.IO;
 using System.Security.Permissions;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using CsvHelper;
 
 namespace ConsoleApplication
 {
     class Program
     {
-        
-    public static void LoadJson()
+        public class Data
+        {
+            public string Id { get; set; }
+            public string Title { get; set; }
+            public string Scription { get; set; }
+
+            public Data(string id, string title, string scription)
+            {
+                Id = id;
+                Title = title;
+                Scription = scription;
+            }
+        }
+        public static void ParseCSV()
+        {
+            Console.Write("Path: ");
+            string path = Console.ReadLine();
+            using (var reader = new StreamReader(@path))
+            {
+                List<Data> data = new List<Data>();
+                while (!reader.EndOfStream)
+                {
+                    var line = reader.ReadLine();
+                    var values = line.Split(';');
+
+                    data.Add(new Data(values[0], values[1], values[2]));
+                }
+                Console.WriteLine("Id\tTitle\tScription\t");
+                foreach (Data item in data)
+                {
+                    Console.WriteLine("{0}\t{1}\t{2}",item.Id, item.Title, item.Scription);
+                }
+            }
+        }
+        public static void LoadJson()
         {
             string jsonString = "";
             Console.Write("Path: ");
@@ -34,10 +68,10 @@ namespace ConsoleApplication
 
             foreach (dynamic item in data)
             {
-                Console.WriteLine("{0}\n{1}\n{2}\n{3}", item.firstName, item.lastName,item.age,item.address);
+                Console.WriteLine("{0}\n{1}\n{2}\n{3}", item.firstName, item.lastName, item.age, item.address);
                 foreach (dynamic cars in item.car)
                 {
-                    Console.WriteLine("{0}\n{1}\n",cars.model,cars.price);
+                    Console.WriteLine("{0}\n{1}\n", cars.model, cars.price);
                 }
             }
 
@@ -146,7 +180,7 @@ namespace ConsoleApplication
         {
             while (true)
             {
-                Console.Write("1.Output all files from subdirectories\n2.Output of a certain format\n3.Read the file\n4.Monitoring directories\n");
+                Console.Write("1.Output all files from subdirectories\n2.Output of a certain format\n3.Read the file\n4.Monitoring directories\n5.Parse json file\n6.Parse csv file\n\n");
                 string number = Console.ReadLine();
                 switch (number)
                 {
@@ -164,6 +198,9 @@ namespace ConsoleApplication
                         break;
                     case "5":
                         LoadJson();
+                        break;
+                    case "6":
+                        ParseCSV();
                         break;
                     default:
                         Console.WriteLine("Error");
